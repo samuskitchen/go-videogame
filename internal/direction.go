@@ -6,4 +6,6 @@ const (
 	Idle Direction = iota
 	LeftDirection
 	RightDirection
+	FrontDirection
+	BackDirection
 )

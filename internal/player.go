@@ -83,6 +83,20 @@ func (p *Player) Update(direction Direction, action Action, dt float64) {
 
 func (p *Player) move(direction Direction, dt float64) {
 	switch direction {
+	case FrontDirection:
+
+		newY := p.pos.Y + (p.vel * dt)
+		if newY > 0 {
+			p.pos.Y = newY
+		}
+
+	case BackDirection:
+
+		newY := p.pos.Y - (p.vel * dt)
+		if newY < p.world.Bounds().H() {
+			p.pos.Y = newY
+		}
+
 	case LeftDirection:
 
 		newX := p.pos.X - (p.vel * dt)
@@ -91,6 +105,7 @@ func (p *Player) move(direction Direction, dt float64) {
 		}
 
 	case RightDirection:
+
 		newX := p.pos.X + (p.vel * dt)
 		if newX < p.world.Bounds().W() {
 			p.pos.X = newX

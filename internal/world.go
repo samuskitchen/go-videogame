@@ -1,6 +1,8 @@
 package internal
 
-import "github.com/faiface/pixel"
+import (
+	"github.com/faiface/pixel"
+)
 
 type World struct {
 	width  float64

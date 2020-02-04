@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/faiface/pixel"
 	"log"
 	"time"
@@ -22,7 +21,7 @@ func main() {
 
 func run() {
 	cfg := pixelgl.WindowConfig{
-		Title:  "Friends of Go: Space Game",
+		Title:  "Space Game",
 		Bounds: pixel.R(0, 0, windowWidth, windowHeight),
 		VSync:  true,
 	}
@@ -42,14 +41,22 @@ func run() {
 		log.Fatal(err)
 	}
 
+	enemy, err := spacegame.NewEnemy("resources/enemy.png", 1, world)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	direction := spacegame.Idle
 	action := spacegame.NoneAction
+	//actionEnemy := spacegame.ShootAction
 	last := time.Now()
 
 	//world.Draw(win)
 
 	for !win.Closed() {
 		dt := time.Since(last).Seconds()
+		dtEnemy := time.Since(last).Seconds()
+
 		last = time.Now()
 
 		win.Clear(colornames.Black)
@@ -63,17 +70,30 @@ func run() {
 			direction = spacegame.RightDirection
 		}
 
+		if win.Pressed(pixelgl.KeyUp) {
+			direction = spacegame.FrontDirection
+		}
+
+		if win.Pressed(pixelgl.KeyDown) {
+			direction = spacegame.BackDirection
+		}
+
 		if win.Pressed(pixelgl.KeySpace) {
 			action = spacegame.ShootAction
 		}
 
 		player.Update(direction, action, dt)
 		player.Draw(win)
+
+		enemy.UpdateEnemy(direction, action, dtEnemy)
+		enemy.DrawEnemy(win)
+
+
 		direction = spacegame.Idle
 		action = spacegame.NoneAction
 
-		fps := 1 / dt
-		fmt.Println("FPS: ", int(fps))
+		//fps := 1 / dt
+		//fmt.Println("FPS: ", int(fps))
 
 		win.Update()
 	}
